@@ -1,0 +1,55 @@
+ DADOS DE ENTRADA PARA RESOLUÇÃO DO PROBLEMA INVASÃO BIOLÓGICA
+ -------------------------------------------------------------
+ -------------------------------------------------------------
+ --------- PARÂMETROS PARA A MONTAGEM DO ESQUEMAS NUMÉRICOS
+ ----------------------------------------------------------
+ FOU            TERMO CONVECTIVO - FOU , CUBISTA
+ 0.0
+ ---------------------------------------------
+ --------- PARÂMETROS GLOBAIS PARA A SIMULAÇÃO
+ ---------------------------------------------
+ 00024.0        	T_FIN   - TEMPO FINAL DE SIMULAÇÃO
+ 5.0E-03        	DELTA_T - LAPSO TEMPORAL
+ 0000129        	NI      - NUMERO DE PONTOS DA MALHA X
+ 0000129        	MJ      - NUMERO DE PONTOS DA MALHA Y 
+ 1.0E-00        	W_SOL   - FATOR DE RELAXAÇÃO DO SISTEMA QUE RESOLVE O SISTEMA
+ 0005000        	IT_SOL  - NÚMERO MÁXIMO DE ITERAÇÕES PARA RESOLVER O SISTEMA
+ 1.0E-08        	TOL_SOL - MÍNIMO ERRO ASSUMIDO AO RESOLVER O SISTEMA
+ 1.0E-08        	TOL_PER - MÍNIMO ERRO ASSUMIDO PARA ACEITAR REGIME PERMANENTE
+ 0000200        	AM_FRAM - AMOSTRA DE FRAMES TOMADOS NA SIMULAÇÃO OU NUMERO DE ITERACOES TOMADAS NO CASO DE CALCULO DO EQUILIBRIO
+ 0.00100		TOL_OCUP- MÍNIMO POPULACAO NECESSARIA PARA CONSIDERAR A OCUPACAO DO TERRENO
+ NAO			EXT_SN  - UTILIZAR EXTINCAO CASO OCUP=0.0 (SIM OU NAO)
+ 00010.0		POP_C   - COEFICIENTE PARA CALCULO DA POPULACAO MAXIMA (ESTOURO DE POPULACAO)
+ ----------------------------------------------------------------------------------------
+ --------- DOMÍNIO - COMPRIMENTOS: INICIAL, FINAL E SIM/EQU/AUT (SIM="SIMPLES SIMULACAO" EQU="COM OBJETIVO DE ENCONTRAR O EQUILIBRIO" AUT="VARIAÇÃO AUTOMATICA")
+ ----------------------------------------------------------------------------------------
+ 0.00000  1280.000000	AUT	- DOMINIO X
+ 0.00000  960.0000000	SIM	- DOMINIO Y
+ -------------------------------------------------
+ --------- PARÂMETROS PARA LAMBDA
+ -------------------------------------------------
+ BLOCO		L_ZERO		TIPO
+     1		00.500		ELIANDRO	(CONSTANTE, TIAGO, ELIANDRO, ELIANDRO2)
+ -------------------------------------------------
+ --------- PARÂMETROS PARA AS PROPRIEDADES FÍSICAS
+ -------------------------------------------------
+ BLOCO		GAMMA_ZERO	TIPO		(CONSTANTE: GAMMA CONSTANTE)
+     1		009.000	CONSTANTE	-VELOCIDADE DO MOVIMENTO EM X
+     1		009.000	CONSTANTE	-VELOCIDADE DO MOVIMENTO EM Y
+ 01.000					-AUTO_G_STEP (INCREMENTO EM GAMMA NO MODO AUTOMATICO)
+ 09.000					-AUTO_G_MAX  (GAMMA MAXIMO NO MODO AUTOMATICO)
+ ---------------------------------------------------
+ --------- PARÂMETROS PARA A MONTAGEM DO TERMO FONTE
+ ---------------------------------------------------
+ BLOCO     K1        			K2				K3            (COEFICIENTES APLICADOS SOBRE "F") (MODO AUTO EXPONENCIAL: INIC:STEP:FINAL
+     1     001.00  001.00  005.00    	1.0001  1.0001  1.0001     	0001.4  0001.4  0001.4   LOGISTICO	(EXPONENCIAL: F = K1*S, LOGISTICO: F = K1*S*(1.0-S/K2), GOLPERTZ OU GOLPERTZVAR: F = K1*S*ln(K2/S), ALLEE: F = K1*S*(1.0-S/K2)*(S/K3-1.0))
+ -----------------------------------------------------------
+ --------- PARÂMETROS PARA A MONTAGEM DA CONDIÇÃO INICIAL
+ -----------------------------------------------------------
+ BLOCO     A         B         C         D         E        (COEFICIENTES APLICADOS SOBRE "S_I")
+     1     1.2545    1.8870    1.2545    1.8870    3.1415   SPLINE	(ATEQUADRATICO: S = A + B*X + C*X**2, DEGRAU: se X<A entao S=0; se X>=A and X<=C entao S = B; se X>C entao S=0, EXPONENCIAL: S = A*EXP(B*X)+ C, NORMAL: S = (A/SQRT(2*PI*B))*EXP(-0.5*((X-C)**2.0)/B**2.0) )
+ ---------------------------------------------
+ --------- APLICAÇÃO DAS CONDIÇÕES DE CONTORNO
+ ---------------------------------------------
+ BLOCO      W         		E			S			N		(COND. CONTORNO DE ROBIN: 0.0  1.0 - DIRICHLET; 0.0  1.0 - NEUMANN MODIFICADA; 1.0  0.0 - NEUMANN)  
+     1      0.0    1.0		0.0	1.0		0.0	1.0		0.0	1.0
