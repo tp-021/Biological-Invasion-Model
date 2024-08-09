@@ -10,10 +10,10 @@
 
  END TYPE
 
- INTEGER,INTENT(IN)				                ::NB
- TYPE(F_GAMMA),DIMENSION(NB),INTENT(IN)	        ::DADOS_GAMMA
- REAL(KIND=10),INTENT(IN)                       ::X,Y
- REAL(KIND=10),INTENT(OUT)			            ::VEL
+ INTEGER,INTENT(IN)                        ::NB
+ TYPE(F_GAMMA),DIMENSION(NB),INTENT(IN)    ::DADOS_GAMMA
+ REAL(KIND=10),INTENT(IN)                  ::X,Y
+ REAL(KIND=10),INTENT(OUT)                 ::VEL
 
  
  
