@@ -1,7 +1,7 @@
-! PROGRAMA PRINCIPAL, ONDE SE GERENCIA O FLUXO DE DESENVOLVIMENTO DO CÓDIGO INVASÃO BIOLÓGICA
+! PROGRAMA PRINCIPAL, ONDE SE GERENCIA O FLUXO DE DESENVOLVIMENTO DO Cï¿½DIGO INVASï¿½O BIOLï¿½GICA
 PROGRAM PRINCIPAL
 
- !DECLARAÇÃO DOS PARAMETROS GLOBAIS
+ !DECLARAï¿½ï¿½O DOS PARAMETROS GLOBAIS
 
  IMPLICIT NONE
 
@@ -70,28 +70,28 @@ PROGRAM PRINCIPAL
  TYPE(F_GAMMA)             ,DIMENSION(:),ALLOCATABLE	::DADOS_GAMMA_X,DADOS_GAMMA_Y
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! !!!!!!!!!!!!!!!! AQUISIÇÃO DE PARÂMETROS !!!!!!!!!!!!!!!!!!!!!!!!
+! !!!!!!!!!!!!!!!! AQUISIï¿½ï¿½O DE PARï¿½METROS !!!!!!!!!!!!!!!!!!!!!!!!
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
- ! VAMOS CONSIDERAR UM ÚNICO BLOCO
+ ! VAMOS CONSIDERAR UM ï¿½NICO BLOCO
  NB = 1
  
  
  OPEN(2, FILE='PARAMETROS_PP.dat',STATUS='OLD')
 
- READ (2,*) !DADOS DE ENTRADA PARA RESOLUÇÃO DO PROBLEMA INVASÃO BIOLÓGICA
+ READ (2,*) !DADOS DE ENTRADA PARA RESOLUï¿½ï¿½O DO PROBLEMA INVASï¿½O BIOLï¿½GICA
  READ (2,*) !----------------------------------------------------------------------
  
  READ (2,*) !----------------------------------------------------------
- READ (2,*) !--------- PARÂMETROS PARA A MONTAGEM DE ESQUEMAS NUMÉRICOS
+ READ (2,*) !--------- PARï¿½METROS PARA A MONTAGEM DE ESQUEMAS NUMï¿½RICOS
  READ (2,*) !----------------------------------------------------------
 
  READ (2,*) METODO_CONVECTIVO
  READ (2,*) VELOCIDADE
  
  READ (2,*) !---------------------------------------------
- READ (2,*) !--------- PARÂMETROS GLOBAIS PARA A SIMULAÇÃO
+ READ (2,*) !--------- PARï¿½METROS GLOBAIS PARA A SIMULAï¿½ï¿½O
  READ (2,*) !---------------------------------------------
 
  READ (2,*) T_FIN
@@ -107,14 +107,14 @@ PROGRAM PRINCIPAL
  READ (2,*) EXT_SN
  READ (2,*) POP_C
  READ (2,*) !----------------------------------------------------------------------------------------
- READ (2,*) !--------- DOMÍNIO - COMPRIMENTOS: INICIAL, FINAL E FIX/VAR (FIX = FIXO E VAR = VARIAVEL)
+ READ (2,*) !--------- DOMï¿½NIO - COMPRIMENTOS: INICIAL, FINAL E FIX/VAR (FIX = FIXO E VAR = VARIAVEL)
  READ (2,*) !----------------------------------------------------------------------------------------
  
  READ (2,*) COMPDOMX
  READ (2,*) COMPDOMY
  
  READ (2,*) !-------------------------------------------------
- READ (2,*) !--------- PARÂMETROS PARA LAMBDA
+ READ (2,*) !--------- PARï¿½METROS PARA LAMBDA
  READ (2,*) !------------------------------------------------- 
  READ (2,*) !BLOCO		L_ZERO		TIPO
  
@@ -122,7 +122,7 @@ PROGRAM PRINCIPAL
  READ (2,*) (DADOS_LAMBDA(BLOCO),BLOCO=1,NB)
  
  READ (2,*) !-------------------------------------------------
- READ (2,*) !--------- PARÂMETROS PARA AS PROPRIEDADES FÍSICAS
+ READ (2,*) !--------- PARï¿½METROS PARA AS PROPRIEDADES Fï¿½SICAS
  READ (2,*) !-------------------------------------------------
  READ (2,*) !BLOCO		GAMMA_ZERO	TIPO		(CONSTANTE: GAMMA CONSTANTE)
 
@@ -135,7 +135,7 @@ PROGRAM PRINCIPAL
  
  
  READ (2,*) !---------------------------------------------------
- READ (2,*) !--------- PARÂMETROS PARA A MONTAGEM DO TERMO FONTE
+ READ (2,*) !--------- PARï¿½METROS PARA A MONTAGEM DO TERMO FONTE
  READ (2,*) !---------------------------------------------------
  READ (2,*) !BLOCO     F
 
@@ -143,7 +143,7 @@ PROGRAM PRINCIPAL
  READ (2,*) (FONTE(BLOCO),BLOCO=1,NB)
  
  READ (2,*) !--------------------------------------------------------
- READ (2,*) !--------- PARÂMETROS PARA A MONTAGEM DA CONDIÇÃO INICIAL
+ READ (2,*) !--------- PARï¿½METROS PARA A MONTAGEM DA CONDIï¿½ï¿½O INICIAL
  READ (2,*) !--------------------------------------------------------
  READ (2,*) !BLOCO     S_I
 
@@ -151,7 +151,7 @@ PROGRAM PRINCIPAL
  READ (2,*) (PARCOND_I(BLOCO),BLOCO=1,NB)
   
  READ (2,*) !---------------------------------------------
- READ (2,*) !--------- APLICAÇÃO DAS CONDIÇÕES DE CONTORNO
+ READ (2,*) !--------- APLICAï¿½ï¿½O DAS CONDIï¿½ï¿½ES DE CONTORNO
  READ (2,*) !---------------------------------------------
  READ (2,*) ! BLOCO      W         E
 
@@ -161,12 +161,12 @@ PROGRAM PRINCIPAL
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!! EXECUÇÃO DO CÓDIGO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!! EXECUï¿½ï¿½O DO Cï¿½DIGO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
  !!! PASTAS E ARQUIVOS !!!
 
- ! SE A PASTA SAI_PD (SAIDAS DE DENSIDADE POPULACIONAL) EXISTE ENTÃO ELA É DELETADA
+ ! SE A PASTA SAI_PD (SAIDAS DE DENSIDADE POPULACIONAL) EXISTE ENTï¿½O ELA ï¿½ DELETADA
  
  MANIPULA = SYSTEM('if test -e SAI_PD; then rm -r SAI_PD; fi;')
  MANIPULA = SYSTEM('if test -e SAI_AUTO; then rm -r SAI_AUTO; fi;') 
@@ -175,6 +175,10 @@ PROGRAM PRINCIPAL
  
  MANIPULA = SYSTEM('mkdir SAI_PD')
  
+ !CRIA PASTA DENSIDADE
+
+ MANIPULA = SYSTEM('mkdir SAI_PD/DENSIDADE')
+
  !CRIA A PASTA GAMMAX
  
  MANIPULA = SYSTEM('mkdir SAI_PD/GAMMAX')
@@ -199,35 +203,35 @@ PROGRAM PRINCIPAL
  
  MANIPULA = SYSTEM('mkdir SAI_PD/ANIMA')
 
- ! SE O ARQUIVO EVOLUCAO.dat EXISTE ENTÃO É DELETADO
+ ! SE O ARQUIVO EVOLUCAO.dat EXISTE ENTï¿½O ï¿½ DELETADO
  
  MANIPULA = SYSTEM('if test -e EVOLUCAO.dat; then rm EVOLUCAO.dat; fi;') 
 
- ! SE O ARQUIVO DIAGONAL_DOMINANTE.dat EXISTE ENTÃO É DELETADO
+ ! SE O ARQUIVO DIAGONAL_DOMINANTE.dat EXISTE ENTï¿½O ï¿½ DELETADO
  
  MANIPULA = SYSTEM('if test -e DIAGONAL_DOMINANTE.dat; then rm DIAGONAL_DOMINANTE.dat; fi;') 
 
- ! SE O ARQUIVO QUANT_POPULACIONAL.dat EXISTE ENTÃO É DELETADO 
+ ! SE O ARQUIVO QUANT_POPULACIONAL.dat EXISTE ENTï¿½O ï¿½ DELETADO 
 
  MANIPULA = SYSTEM('if test -e QUANT_POPULACIONAL.dat; then rm QUANT_POPULACIONAL.dat; fi;')
  
- ! SE O ARQUIVO EQUILIBRIO.dat EXISTE ENTÃO É DELETADO 
+ ! SE O ARQUIVO EQUILIBRIO.dat EXISTE ENTï¿½O ï¿½ DELETADO 
 
  MANIPULA = SYSTEM('if test -e EQUILIBRIO.dat; then rm EQUILIBRIO.dat; fi;')
  
- ! SE O ARQUIVO POP_TOTAL_NUMERICO.dat EXISTE ENTÃO É DELETADO 
+ ! SE O ARQUIVO POP_TOTAL_NUMERICO.dat EXISTE ENTï¿½O ï¿½ DELETADO 
 
  MANIPULA = SYSTEM('if test -e POP_TOTAL_NUMERICO.dat; then rm POP_TOTAL_NUMERICO.dat; fi;')
  
- ! SE O ARQUIVO POP_TOTAL_ANALITICO.dat EXISTE ENTÃO É DELETADO 
+ ! SE O ARQUIVO POP_TOTAL_ANALITICO.dat EXISTE ENTï¿½O ï¿½ DELETADO 
 
  MANIPULA = SYSTEM('if test -e POP_TOTAL_ANALITICO.dat; then rm POP_TOTAL_ANALITICO.dat; fi;')
 
- ! SE O ARQUIVO SN_******.dat EXISTE ENTÃO É DELETADO 
+ ! SE O ARQUIVO SN_******.dat EXISTE ENTï¿½O ï¿½ DELETADO 
 
  MANIPULA = SYSTEM('if test -e SN_*; then rm SN_*; fi;')
  
- ! SE O ARQUIVO EVO_NEGATIVA.dat EXISTE ENTÃO É DELETADO 
+ ! SE O ARQUIVO EVO_NEGATIVA.dat EXISTE ENTï¿½O ï¿½ DELETADO 
 
  MANIPULA = SYSTEM('if test -e EVO_NEGATIVA.dat; then rm EVO_NEGATIVA.dat; fi;')
  
@@ -320,15 +324,15 @@ PROGRAM PRINCIPAL
 !   
 !  
 !  
-!  ! CÓPIA DO ARQUIVO EVOLUCAO.dat
+!  ! Cï¿½PIA DO ARQUIVO EVOLUCAO.dat
 !    
 !    MANIPULA = SYSTEM('mv '//'EVOLUCAO.dat'//' SAI_PD')
 ! 
-!  ! CÓPIA DO ARQUIVO DIAGONAL_DOMINANTE.dat
+!  ! Cï¿½PIA DO ARQUIVO DIAGONAL_DOMINANTE.dat
 !    
 !    MANIPULA = SYSTEM('mv '//'DIAGONAL_DOMINANTE.dat'//' SAI_PD')
 !    
-!  ! CÓPIA DO ARQUIVO PARAMETROS_PP.dat
+!  ! Cï¿½PIA DO ARQUIVO PARAMETROS_PP.dat
 !    
 !    MANIPULA = SYSTEM('cp '//'PARAMETROS_PP.dat'//' SAI_PD')
 !             

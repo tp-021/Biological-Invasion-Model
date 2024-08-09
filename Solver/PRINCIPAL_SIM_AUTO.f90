@@ -208,7 +208,7 @@ IMPLICIT NONE
  
  CALL GRAVACAO_S2D(NI,MJ,XS,YS,S2D,NOMEARQ,T)
  
- MANIPULA = SYSTEM('if test -e '//NOMEARQ//'; then mv '//NOMEARQ//' SAI_PD; fi;')
+ MANIPULA = SYSTEM('if test -e '//NOMEARQ//'; then mv '//NOMEARQ//' SAI_PD/DENSIDADE; fi;')
  
  
  ! PREPARA ARQUIVO QUANTIDADES DE INTERESSE
@@ -296,7 +296,7 @@ IMPLICIT NONE
  WRITE(NOMEARQ_N,'(I0.6)') FRAME
  NOMEARQ='S2D'//NOMEARQ_N//'.dat'
  CALL GRAVACAO_S2D(NI,MJ,XS,YS,S2D,NOMEARQ,T)
- MANIPULA = SYSTEM('if test -e '//NOMEARQ//'; then mv '//NOMEARQ//' SAI_PD; fi;')
+ MANIPULA = SYSTEM('if test -e '//NOMEARQ//'; then mv '//NOMEARQ//' SAI_PD/DENSIDADE; fi;')
  
  !PRINT*, NOMEARQ
  
@@ -428,7 +428,8 @@ IMPLICIT NONE
  MANIPULA = SYSTEM('cp -r SAI_PD SAI_AUTO/'//NOME_PASTA)                             !COPIA PASTA
  
  MANIPULA = SYSTEM('if test -e SAI_PD; then rm -r SAI_PD; fi;')                      !DELETA PASTA SAIDAS
- MANIPULA = SYSTEM('mkdir SAI_PD')                                                   !RECRIA PASTAS
+ MANIPULA = SYSTEM('mkdir SAI_PD')   
+ MANIPULA = SYSTEM('mkdir SAI_PD/DENSIDADE')                                                !RECRIA PASTAS
  MANIPULA = SYSTEM('mkdir SAI_PD/GAMMAX')
  MANIPULA = SYSTEM('mkdir SAI_PD/GAMMAY')
  MANIPULA = SYSTEM('mkdir SAI_PD/LAMBDA')
