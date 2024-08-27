@@ -24,18 +24,44 @@ program main
                 ! m_u (i+1,j) = [u(i,j)+u(i+2)]/2
 
                 
-                m_ur = [u(i-2,j)+u(i)]/2
-                m_ul = [u(i,j)+u(i+2)]/2
+                m_ue = [u(i-2,j)+u(i,j)]/2
 
-                if ( m_ur >= 0 ) then
-                    S = 1
+                if ( m_ue >= 0) then
+                    Se = 1
                 else
-                    S = -1  
+                    Se = -1  
                 end if
 
-                C_u =
+                m_uw = [u(i,j)+u(i+2),j]/2
+
+                if ( m_uw >= 0) then
+                    Sw = 1
+                else
+                    Sw = -1  
+                end if
+
+                m_vne = [v(i,j+2)+v(i,j)]/2
+
+                if ( m_vne >= 0) then
+                    Sn = 1
+                else
+                    Sn = -1  
+                end if
+
+                m_use = [v(i,j)+v(i,j-2)]/2
+
+                if ( m_vse >= 0) then
+                    Ss = 1
+                else
+                    Ss = -1  
+                end if 
+
+
+                C_u = {m_ue * [(1+Re)/2*u(i,j) + (1-Re)/2*e(i+2,j)] - m_up * [(1+Rp)/2*u(i-2,j) + (1-Rp)/2*e(i,j)]}/dx + &
+                      {m_vne * [(1+Sn)/2*u(i,j) + (1-Sn)/2*u(i,j+2)] - m_vse * [(1+Ss)/2*u(i,j-2) + (1-Ss)/2*u(i,j)]}/dy
 
                 ! Termo convectivo C_v
+
                 C_v =
 
                 ! Termo difusivo
