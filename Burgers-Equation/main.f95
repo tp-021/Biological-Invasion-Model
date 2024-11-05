@@ -1,78 +1,70 @@
 program main
     implicit none
     
-    ! Declaração de variáveis
-    ! Gerais
-    integer :: end
+    real, parameter :: x0 = 0.0
+    real, parameter :: xf = 10.0
+    real, parameter :: y0 = 0.0
+    real, parameter :: yf = 10.0
+    real, parameter :: t0 = 0.0
+    real, parameter :: tf = 20.0
+
+    integer, parameter :: ni = 20
+    integer, parameter :: mj = 20
+    integer, parameter :: k = 10
+
+    real, dimension(:,:), :: gamma_x, ANT_gamma_X
+    real :: media_e, media_w, media_n, media_s, nu, dx, dy, dt
+    integer :: Se, Sw, Sn, Ss, i, j
+
+    nu = 1
     
-    ! Locais
-    integer :: i,j
+    dx = (x0-xf) /ni
+    dy = (y0-yf) /mj
+    dt = (t0-tf) /k
 
-    ! Loop temporal
-    do t = start, endt
-        
-        u_ant = u
-        v_ant = v
-
-        ! Loop x,y
-        do i = start, end
-            do j = start, end
-                
-                ! Termo convectivo C_u
-                ! médias
-                ! m_u (i-1,j) = [u(i-2,j)+u(i)]/2
-                ! m_u (i+1,j) = [u(i,j)+u(i+2)]/2
-
-                
-                m_ue = [u(i-2,j)+u(i,j)]/2
-
-                if ( m_ue >= 0) then
-                    Se = 1
-                else
-                    Se = -1  
-                end if
-
-                m_uw = [u(i,j)+u(i+2),j]/2
-
-                if ( m_uw >= 0) then
-                    Sw = 1
-                else
-                    Sw = -1  
-                end if
-
-                m_vne = [v(i,j+2)+v(i,j)]/2
-
-                if ( m_vne >= 0) then
-                    Sn = 1
-                else
-                    Sn = -1  
-                end if
-
-                m_use = [v(i,j)+v(i,j-2)]/2
-
-                if ( m_vse >= 0) then
-                    Ss = 1
-                else
-                    Ss = -1  
-                end if 
-
-
-                C_u = {m_ue * [(1+Re)/2*u(i,j) + (1-Re)/2*e(i+2,j)] - m_up * [(1+Rp)/2*u(i-2,j) + (1-Rp)/2*e(i,j)]}/dx + &
-                      {m_vne * [(1+Sn)/2*u(i,j) + (1-Sn)/2*u(i,j+2)] - m_vse * [(1+Ss)/2*u(i,j-2) + (1-Ss)/2*u(i,j)]}/dy
-
-                ! Termo convectivo C_v
-
-                C_v =
-
-                ! Termo difusivo
-                V_u = [u(i-2,j) - 2*u(i,j) + u(i+2,j)]/(dx^2) + [u(i,j-2) - 2*u(i,j) + u(i,j+2)]/(dy^2)
-                V_v = [v(i-2,j) - 2*v(i,j) + v(i+2,j)]/(dx^2) + [v(i,j-2) - 2*u(i,j) + v(i,j+2)]/(dy^2)
-
-                ! Solução numérica
-                u(i,j) = [V_u - C_u + u_ant(i,j)]
-                v(i,j) = [V_v - C_v + v_ant(i,j)]
-            end do
+    do i = 1, ni
+        do j = 1, mj
             
+            media_e = (gamma_x(i,j) + gamma_x(i+1,j))/2
+            media_w = (gamma_x(i,j) + gamma_x(i-1,j))/2
+            media_n = (gamma_x(i,j) + gamma_x(i,j+1))/2
+            media_s = (gamma_x(i,j) + gamma_x(i,j-1))/2
+
+            if ( media_e >= 0 ) then
+                Se = 1
+            else 
+                Se = -1 
+            end if
+
+            if ( media_w >= 0 ) then
+                Sw = 1
+            else 
+                Sw = -1 
+            end if
+
+            if ( media_n >= 0 ) then
+                Sn = 1
+            else 
+                Sn = -1 
+            end if
+
+            if ( media_e >= 0 ) then
+                Ss = 1
+            else 
+                Ss = -1 
+            end if
+
+            CP = 1/dt + 1/dx{media_e * {1+Se}/2 - media_w * {1-Sw}/2} + 1/dy{media_n * {1+Sn}/2 - media_s * {1-Ss}/2} + & 
+            & {2*nu}/{dx**2} + {2*nu}/{dy**2}  
+            
+            CE = 1/dx * media_e * {1-Se}/2 - nu/{dx**2}
+            CW = 1/dx * media_w * {1-Sw}/2 - nu/{dx**2}
+            CN = 1/dy * media_n * {1-Sn}/2 - nu/{dy**2}
+            CS = 1/dy * media_s * {1-Ss}/2 - nu/{dy**2}
+
+            gamma_x (i,j) = {1/Cp}*{Bp - CE* ANT_gamma_x(i+1,j) + CW* gamma_x(i-1,j) - CN* ANT_gamma_x(i,j+1) + CS* gamma_x(i,j-1)
+
         end do
     end do
+ 
 end program main
