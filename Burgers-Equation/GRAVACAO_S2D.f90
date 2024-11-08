@@ -30,7 +30,7 @@ WRITE(774,*) '#T=',T
 DO I=1,NI+1
     DO J=1,MJ+2
         IF (J<=MJ+1) THEN
-            WRITE(774,110) XS(I) , YS(J) , S2D(J,I)
+            WRITE(774,110) XS(I) , YS(J) , S2D(I,J)
         ELSE
             WRITE(774,'(2X)')
         END IF

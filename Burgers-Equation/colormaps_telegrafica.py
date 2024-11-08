@@ -53,68 +53,80 @@ def get_densidade():
     red = (1.00,0.00,0.17)
     pink = (1.00,0.20,0.87)
     lightpink = (0.87,0.60,1.00)
-    blue = (0.0, 0.0, 1)
-
+    
     darkorange = (0.28,0.05,0.00)
     orange = (1.00,0.50,0.00)
     lightorange= (1.00,1.00,0.30)
     
     black = (0, 0, 0)
+
+    darkgreen  = (0,0.39,0)
+    green      = (0.13,0.54,0.13)
+    lightgreen = (0.56,0.93,0.56)
+    blue = (0.0, 0.0, 1)
     white = (1, 1, 1)
-    green = (0, 1, 0.5)
 
     cdict = {
         'red': [
-            (0.0, white[0], white[0] ),
-            (1/12,white[0], white[0]), #blue
-            (2.5/12,blue[0], blue[0] ), #blue
+            (0.0,  white[0], white[0]),
+            (1/12,  blue[0],  blue[0]),
+
+            (2.5/12, lightgreen[0], lightgreen[0]),
+            (3.5/12,      green[0],      green[0]), 
+            (4.5/12,  darkgreen[0], darkgreen[0] ), 
             
-            (5/12, black[0], black[0]), #limite black
+            (5/12, black[0], black[0]), 
             (6/12, black[0], black[0]),
-            (7/12, black[0], black[0]), #limite black
+            (7/12, black[0], black[0]), 
             
             (7.5/12, darkorange[0], darkorange[0]),
             (8.5/12, orange[0], orange[0]),
             # (7.09/12, darkyellow[0], darkyellow[0]),
             (9.5/12, lightorange[0], lightorange[0]),  
            
-            (10/12,lightpink[0],lightpink[0]), #pink
-            (11/12,pink[0],pink[0]), #pink
-            (1.0,red[0],red[0] )  #red
+            (10/12,lightpink[0],lightpink[0]), 
+            (11/12,pink[0],pink[0]), 
+            (1.0,red[0],red[0] )  
     ],      
         'green': [
-            (0.0, white[1], white[1] ),
-            (1/12, white[1], white[1] ), #blue
-            (2.5/12,blue[1], blue[1] ), #blue
-            
-            (5/12, black[1], black[1]), #limite black
-            (6/12, black[1], black[1]),
-            (7/12, black[1], black[1]), #limite black
+            (0.0,  white[1], white[1]),
+            (1/12,  blue[1],  blue[1]),
 
-            (7.5/12, darkorange[1], darkorange[1]),
-            (8.5/12, orange[1], orange[1]),
+            (2.5/12, lightgreen[1], lightgreen[1]),
+            (3.5/12,      green[1],      green[1]), 
+            (4.5/12,  darkgreen[1],  darkgreen[1]),
+            
+            (5/12, black[1], black[1]), 
+            (6/12, black[1], black[1]),
+            (7/12, black[1], black[1]), 
+
+            (7.5/12,  darkorange[1],  darkorange[1]),
+            (8.5/12,      orange[1],      orange[1]),
             (9.5/12, lightorange[1], lightorange[1]), 
             
-            (10/12, lightpink[1], lightpink[1]), #pink
-            (11/12,pink[1],pink[1]), #pink
-            (1.0,red[1],red[1] )  #red
+            (10/12, lightpink[1], lightpink[1]), 
+            (11/12,      pink[1],      pink[1]), 
+            (1.0,         red[1],       red[1])  
     ],
         'blue': [
-            (0.0, white[2], white[2] ),
-            (1/12, white[2], white[2] ), #blue
-            (2.5/12, blue[2], blue[2] ), #blue
+            (0.0,  white[2], white[2]),
+            (1/12,  blue[2],  blue[2]),
+
+            (2.5/12, lightgreen[2], lightgreen[2]),
+            (3.5/12,      green[2],      green[2]), 
+            (4.5/12,  darkgreen[2],  darkgreen[2]),
             
-            (5/12, black[2], black[2]), #limite black
+            (5/12, black[2], black[2]), 
             (6/12, black[2], black[2]),
-            (7/12, black[2], black[2]), #limite black
+            (7/12, black[2], black[2]), 
              
-            (7.5/12, darkorange[2], darkorange[2]),
-            (8.5/12, orange[2], orange[2]),
+            (7.5/12,  darkorange[2],  darkorange[2]),
+            (8.5/12,      orange[2],      orange[2]),
             (9.5/12, lightorange[2], lightorange[2]), 
              
-            (10/12, lightpink[2], lightpink[2]), #pink
-            (11/12, pink[2], pink[2]), #pink
-            (1.0, red[2], red[2] )  #red
+            (10/12, lightpink[2], lightpink[2]), 
+            (11/12,      pink[2],      pink[2]), 
+            (1.0,         red[2],       red[2])  
     ]
     }
 
