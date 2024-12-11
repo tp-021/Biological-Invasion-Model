@@ -17,9 +17,7 @@ REAL(KIND=10),DIMENSION(MJ+1,NI+1),INTENT(IN)	       ::S2D
 INTEGER :: MANIPULA,I,J
 !----------
   
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!GRAVA��O DAS DENSIDADES POPULACIONAIS
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 !ESCREVER S2D EM ARQUIVO
 MANIPULA = SYSTEM('if test -e '//NOME//'; then rm '//NOME//'; fi;')

@@ -4,14 +4,13 @@ program main
     ! Parâmetros do modo automático
     ! OBS: só funciona para 0 < dx <= 1, o mesmo vale para dy e dt
 
-    
     integer, parameter :: n_max = 1 !Número de testes para o espaço(cada teste divide por 2 delta a seguir:)
     integer, parameter :: m_max = 1 !Número de testes para o tempo(cada teste divide por 2 delta a seguir:)
     !OBS: NÃO VARIAR OS DOIS AO MESMO TEMPO
 
     real, parameter :: dx_inicial = 0.0125
-    real, parameter :: dy_inicial = 0.1025
-    real, parameter :: dt_inicial = 0.001
+    real, parameter :: dy_inicial = 0.0125
+    real, parameter :: dt_inicial = 0.0001
 
     ! Informações sobre o domínio
 
@@ -22,7 +21,7 @@ program main
     real(kind=10), parameter :: yf = 1.0
 
     real(kind=10), parameter :: t0 = 0.0
-    real(kind=10), parameter :: tf = 1.0
+    real(kind=10), parameter :: tf = 10.0
 
     ! Outros parâmetros
 
@@ -30,9 +29,15 @@ program main
     
     real(kind=10), parameter :: tol_erro = 0.000001
 
+    real(kind=10), parameter :: tol_est = 0.000001
+
     real(kind=10), parameter :: pi = acos(-1.0)
 
     integer, parameter :: frame = 50  !A cada frame, o resultado é gravado
+
+    ! Exemplo que será calculado (Alterar os parâmetros acima)
+
+    character, parameter :: exemplo = '1' ! '1': pagina 61; '2': pagina 65 (dissertação da Cláudia)
 
     ! ............................................................................................................................ ! 
     ! Cáculo de ni, mj, tt (de acordo com o menor delta / maior qtd de repartições)
@@ -80,6 +85,11 @@ program main
     character(16) :: pasta
     character(4) :: nome_p
 
+    ! ............................................................................................................................ ! 
+    ! Variáveis para calculo da solu estacionária
+
+    real(kind=10), dimension(max_ni+1,max_mj+1) :: est_gamma_x, est_gamma_y 
+    
     ! ............................................................................................................................ ! 
     ! Definição do tamanho das variáveis/matrizes
     
@@ -213,9 +223,16 @@ program main
             t(k) =  t0 + dt * (k - (3.0/2.0))
         end do 
         
-    
+        ! ======================================================================================================================== !
+        ! CALCULO DE GAMMA NO ESTADO ESTACIONÁRIO
 
-        ! ------------------------------------------------------------------------------------------------------------------------ !
+        ! est_gamma_x = 0.0; est_gamma_y = 0.0
+
+        ! call est_burgers(x,y,dx,dy,ni,mj,nu,pi,tol_erro,est_gamma_x,est_gamma_y)
+
+        ! MANIPULA = SYSTEM('if test -e est_gamma.dat; then mv est_gamma.dat SAI_AUTO/'//trim(pasta)//'; fi;')
+
+        ! ======================================================================================================================== !
         ! CONDIÇÃO INICIAL
 
         k = 1
@@ -224,17 +241,24 @@ program main
         do i = 1, ni+1
             do j = 1, mj+1
 
-                !--------------------------------!
-                ! Dissertação claudia página 61
-            
-                gamma_x(i,j) = ( -4.0*nu*pi * cos(2.0*pi*x(i)) * sin(pi*y(j)) ) / ( 2.0 + sin(2.0*pi*x(i)) * sin(pi*y(j)) )
-                gamma_y(i,j) = ( -2.0*nu*pi * sin(2.0*pi*x(i)) * cos(pi*y(j)) ) / ( 2.0 + sin(2.0*pi*x(i)) * sin(pi*y(j)) )
+                select case (exemplo)
+
+                    case('1')
+                    !--------------------------------!
+                    ! Dissertação claudia página 61
                 
-                !--------------------------------!
-                ! Dissertação claudia página 65
-                ! gamma_x(i,j) = 3.0/4.0 - 1.0/( 4* (1 + exp( (4.0*y(j)-4.0*x(i)) / (32.0*nu) ) ) )
-                ! gamma_y(i,j) = 3.0/4.0 + 1.0/( 4* (1 + exp( (4.0*y(j)-4.0*x(i)) / (32.0*nu) ) ) )
-            
+                        gamma_x(i,j) = ( -4.0*nu*pi * cos(2.0*pi*x(i)) * sin(pi*y(j)) ) / ( 2.0 + sin(2.0*pi*x(i)) * sin(pi*y(j)) )
+                        gamma_y(i,j) = ( -2.0*nu*pi * sin(2.0*pi*x(i)) * cos(pi*y(j)) ) / ( 2.0 + sin(2.0*pi*x(i)) * sin(pi*y(j)) )
+
+                    case('2')
+                    !--------------------------------!
+                    ! Dissertação claudia página 65
+
+                        gamma_x(i,j) = 3.0/4.0 - 1.0/( 4* (1 + exp( (4.0*y(j)-4.0*x(i)) / (32.0*nu) ) ) )
+                        gamma_y(i,j) = 3.0/4.0 + 1.0/( 4* (1 + exp( (4.0*y(j)-4.0*x(i)) / (32.0*nu) ) ) )
+
+                end select
+
             end do
         end do 
 
@@ -288,51 +312,57 @@ program main
             ! .................................................................................................................... !
             ! Condição de contorno
 
-            !--------------------------------!
-            ! Dissertação claudia página 61
+            select case (exemplo)
 
-            do i = 1, ni+1
+                case('1')
+                !--------------------------------!
+                ! Dissertação claudia página 61
 
-                gamma_x(i,mj+1) = 0
-                gamma_x(i,1)    = 0
+                do i = 1, ni+1
+
+                    gamma_x(i,mj+1) = 0
+                    gamma_x(i,1)    = 0
+                    
+                    gamma_y(i,1)    = -nu*pi * exp(-5*(pi**2)*nu*t(k)) * sin(2*pi*x(i))
+                    gamma_y(i,mj+1) =  nu*pi * exp(-5*(pi**2)*nu*t(k)) * sin(2*pi*x(i))
+                    
+                end do ! Condição de contorno j
+
+                do j = 1, mj+1
+
+                    gamma_x(1,j)    = -2*nu*pi * exp(-5*(pi**2)*nu*t(k)) * sin(pi*y(j))
+                    gamma_x(ni+1,j) = -2*nu*pi * exp(-5*(pi**2)*nu*t(k)) * sin(pi*y(j))
                 
-                gamma_y(i,1)    = -nu*pi * exp(-5*(pi**2)*nu*t(k)) * sin(2*pi*x(i))
-                gamma_y(i,mj+1) =  nu*pi * exp(-5*(pi**2)*nu*t(k)) * sin(2*pi*x(i))
-                
-            end do ! Condição de contorno j
+                    gamma_y(1,j)    = 0
+                    gamma_y(ni+1,j) = 0
+                    
+                end do ! Condição de contorno j
 
-            do j = 1, mj+1
+                case('2')
+                !--------------------------------!
+                ! Dissertação claudia página 65
 
-                gamma_x(1,j)    = -2*nu*pi * exp(-5*(pi**2)*nu*t(k)) * sin(pi*y(j))
-                gamma_x(ni+1,j) = -2*nu*pi * exp(-5*(pi**2)*nu*t(k)) * sin(pi*y(j))
-            
-                gamma_y(1,j)    = 0
-                gamma_y(ni+1,j) = 0
-                
-            end do ! Condição de contorno j
+                    do i = 1, ni+1
 
-            !--------------------------------!
-            ! Dissertação claudia página 65
+                        gamma_x(i,1)    = 3.0/4.0 - 1.0/( 4.0* (1.0 + exp(    (-4.0*x(i)-t(k)) / (32.0*nu) ) ) )
+                        gamma_x(i,mj+1) = 3.0/4.0 - 1.0/( 4.0* (1.0 + exp( (4.0-4.0*x(i)-t(k)) / (32.0*nu) ) ) )
+                    
+                        gamma_y(i,1)    = 3.0/4.0 + 1.0/( 4.0* (1.0 + exp(    (-4.0*x(i)-t(k)) / (32.0*nu) ) ) )
+                        gamma_y(i,mj+1) = 3.0/4.0 + 1.0/( 4.0* (1.0 + exp( (4.0-4.0*x(i)-t(k)) / (32.0*nu) ) ) )
+                        
+                    end do ! Condição de contorno j
 
-            ! do i = 1, ni+1
+                    do j = 1, mj+1
 
-            !     gamma_x(i,1)    = 3.0/4.0 - 1.0/( 4.0* (1.0 + exp(    (-4.0*x(i)-t(k)) / (32.0*nu) ) ) )
-            !     gamma_x(i,mj+1) = 3.0/4.0 - 1.0/( 4.0* (1.0 + exp( (4.0-4.0*x(i)-t(k)) / (32.0*nu) ) ) )
-               
-            !     gamma_y(i,1)    = 3.0/4.0 + 1.0/( 4.0* (1.0 + exp(    (-4.0*x(i)-t(k)) / (32.0*nu) ) ) )
-            !     gamma_y(i,mj+1) = 3.0/4.0 + 1.0/( 4.0* (1.0 + exp( (4.0-4.0*x(i)-t(k)) / (32.0*nu) ) ) )
-                
-            ! end do ! Condição de contorno j
+                        gamma_x(1,j)    = 3.0/4.0 - 1.0/( 4.0* (1.0 + exp(     (4.0*y(j)-t(k)) / (32.0*nu) ) ) )
+                        gamma_x(ni+1,j) = 3.0/4.0 - 1.0/( 4.0* (1.0 + exp( (4.0*y(j)-4.0-t(k)) / (32.0*nu) ) ) )
 
-            ! do j = 1, mj+1
+                        gamma_y(1,j)    = 3.0/4.0 + 1.0/( 4.0* (1.0 + exp(     (4.0*y(j)-t(k)) / (32.0*nu) ) ) )
+                        gamma_y(ni+1,j) = 3.0/4.0 + 1.0/( 4.0* (1.0 + exp( (4.0*y(j)-4.0-t(k)) / (32.0*nu) ) ) )
+                        
+                    end do ! Condição de contorno j
 
-            !     gamma_x(1,j)    = 3.0/4.0 - 1.0/( 4.0* (1.0 + exp(     (4.0*y(j)-t(k)) / (32.0*nu) ) ) )
-            !     gamma_x(ni+1,j) = 3.0/4.0 - 1.0/( 4.0* (1.0 + exp( (4.0*y(j)-4.0-t(k)) / (32.0*nu) ) ) )
-
-            !     gamma_y(1,j)    = 3.0/4.0 + 1.0/( 4.0* (1.0 + exp(     (4.0*y(j)-t(k)) / (32.0*nu) ) ) )
-            !     gamma_y(ni+1,j) = 3.0/4.0 + 1.0/( 4.0* (1.0 + exp( (4.0*y(j)-4.0-t(k)) / (32.0*nu) ) ) )
-                
-            ! end do ! Condição de contorno j
+            end select
 
             exata_gamma_x = gamma_x
             exata_gamma_y = gamma_y
@@ -344,21 +374,27 @@ program main
             do i = 2, ni
                 do j = 2, mj
 
+                    select case (exemplo)
+
+                    case('1')
                     !--------------------------------!
                     ! Dissertação claudia página 61
                     
                     exata_gamma_x (i,j) = -2.0*nu * ( ( 2.0*pi * exp(-5.0*(pi**2.0)*nu*t(k)) * cos(2.0*pi*x(i)) * sin(pi*y(j)) ) / &
-                                                      ( 2.0    + exp(-5.0*(pi**2.0)*nu*t(k)) * sin(2.0*pi*x(i)) * sin(pi*y(j)) ) )
+                                                    ( 2.0    + exp(-5.0*(pi**2.0)*nu*t(k)) * sin(2.0*pi*x(i)) * sin(pi*y(j)) ) )
 
                     exata_gamma_y (i,j) = -2.0*nu * ( ( pi  * exp(-5.0*(pi**2.0)*nu*t(k)) * sin(2.0*pi*x(i)) * cos(pi*y(j)) ) / &
-                                                      ( 2.0 + exp(-5.0*(pi**2.0)*nu*t(k)) * sin(2.0*pi*x(i)) * sin(pi*y(j)) ) )
-                    
+                                                    ( 2.0 + exp(-5.0*(pi**2.0)*nu*t(k)) * sin(2.0*pi*x(i)) * sin(pi*y(j)) ) )
+                
+                    case('2')
                     !--------------------------------!
                     ! Dissertação claudia página 65
 
-                    ! exata_gamma_x (i,j) = 3.0/4.0 - 1.0/( 4.0 * (1.0 + exp( (4.0*y(j)-4.0*x(i)-t(k)) / (32.0*nu) ) ) )
+                    exata_gamma_x (i,j) = 3.0/4.0 - 1.0/( 4.0 * (1.0 + exp( (4.0*y(j)-4.0*x(i)-t(k)) / (32.0*nu) ) ) )
 
-                    ! exata_gamma_y (i,j) = 3.0/4.0 + 1.0/( 4.0 * (1.0 + exp( (4.0*y(j)-4.0*x(i)-t(k)) / (32.0*nu) ) ) )
+                    exata_gamma_y (i,j) = 3.0/4.0 + 1.0/( 4.0 * (1.0 + exp( (4.0*y(j)-4.0*x(i)-t(k)) / (32.0*nu) ) ) )
+
+                    end select
 
                 end do ! Sol analítica
             end do ! Sol analítica
@@ -431,6 +467,7 @@ program main
 
                         CP = 1/dt + (1/dx) * (media_xe * (1+Se)/2 - media_xw * (1-Sw)/2) + (1/dy) * (media_yn * (1+Sn)/2 - &
                         media_ys * (1-Ss)/2) + (2*nu)/(dx**2) + (2*nu)/(dy**2)  
+
                         CE = - 1/dx * media_xe * (1-Se)/2 + nu/(dx**2)
                         CW =   1/dx * media_xw * (1+Sw)/2 + nu/(dx**2)
                         CN = - 1/dy * media_yn * (1-Sn)/2 + nu/(dy**2)                                                                                      
@@ -499,8 +536,15 @@ program main
             write(2,'(I15.0,2X,F15.6,2X,F15.8,2X,F15.8,2X,F15.8,2X,F15.8,2X,F15.8)') k, tempo, erro_exato_gx, erro_exato_gy, & 
             erro_ant_gx, erro_ant_gy, alpha
             close(2)
+            ! ......................................... !
+            ! Saída do laço temporal
 
-             ! ......................................... !
+            if ( erro_ant_gx < tol_est .and. erro_ant_gy < tol_est ) then
+                exit
+            end if
+
+
+            ! ......................................... !
             ! Gravação da solução numérica
 
             if (mod(k,frame) == 0 .or. k == tt+1)  then
@@ -525,6 +569,7 @@ program main
             ANT_gamma_x = gamma_x
             ANT_gamma_y = gamma_y
 
+            
         end do ! Laço temporal
         ! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ !
         ! Gravação de informações extras e mudança da localização dos arquivos restantes
