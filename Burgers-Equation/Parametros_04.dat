@@ -1,0 +1,65 @@
+_____Domínio________________________________________________
+x_inicial x_final:
+    0       1         
+y_inicial y_final:
+    0       1
+t_inicial t_final:
+    0       1
+_____Malha__________________________________________________
+dx           dy         dt:
+0.0125      0.0125      0.001
+n_max (Divide pela metade o valor de dx e dy n_max vezes):
+3
+m_max (Divide pela metade o valor de dy m_max vezes):
+3
+_____Coeficiente_nu__________________________________________
+0.001
+_____Simulação_______________________________________________
+tol_erro:
+0.0000000000001
+it_max: 
+500
+exemplo: 
+'1'
+frames:
+50
+modo:
+'exa'
+.............................................................
+Exemplos:
+
+'1': pagina 61 (dissertação da Cláudia)
+'2': pagina 65 (dissertação da Cláudia)
+.............................................................
+Modos:
+
+'num' :
+'exa :
+'est' :
+
+=============================================================
+Anotações:
+
+
+
+=============================================================
+Resultados da simulação:
+                        
+ok                            
+ Tempo de execução:    13.0825052    
+ok                            
+ Tempo de execução:    26.5176163    
+ok                            
+ Tempo de execução:    49.5640221    
+ok                            
+ Tempo de execução:    56.1318283    
+ok                            
+ Tempo de execução:    106.858490    
+ok                            
+ Tempo de execução:    203.846863    
+ok                            
+ Tempo de execução:    264.502380    
+ok                            
+ Tempo de execução:    492.725891    
+ok                            
+ Tempo de execução:    930.183105    
